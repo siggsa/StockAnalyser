@@ -7,7 +7,7 @@ import yahoo_fin.stock_info as si
 import pandas as pd
 #import yfinance as yf
 
-USD_TO_NOK = 9.25 
+USD_TO_NOK = si.get_live_price("NOK=X") #Live price of USD in NOK
 
 def return_info(ticker, parameter):
     quote = si.get_quote_table(ticker)
@@ -37,19 +37,18 @@ def return_info(ticker, parameter):
     # print(analysts_data)
     return func
 
-print(return_info("BIOT.ST", "growthrate"))
-
 def return_est_val(ticker):
+    live_val = return_info(ticker, "liveprice")
+    est_val = return_info(ticker, "pe") * return_info(ticker, "eps")
+    print("Live value: {0} \nEstimated value: {1}".format(live_val,est_val))
 
+def test_stocks():
+    stock_tickers = ["TEL.OL", "ORK.OL"]
 
-    estval = return_info(ticker, "pe") * return_info(ticker, "eps")
-    print(estval)
+    for ticker in stock_tickers:
+        print("\n")
+        print("{0}".format(ticker))
+        return_est_val(ticker)
 
-#return_est_val("dnb.ol")
-
-
-#print(quote["PE Ratio (TTM)"]) 
-#print(quote["EPS (TTM)"])
-#print(quote["1y Target Est"]) 
-
-#----------------------------
+def all_info(ticker):
+    print(si.get_quote_table(ticker))

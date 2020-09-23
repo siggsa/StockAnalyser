@@ -9,3 +9,8 @@ Analysing stocks with data from yahoo_fin API. The program is created to give an
 
 ####
 Yahoo_fin docs: http://theautomatic.net/yahoo_fin-documentation/
+
+Dependensies:
+pip install yahoo_fin
+pip install pandas
+pip install requests_html
