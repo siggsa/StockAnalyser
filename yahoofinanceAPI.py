@@ -2,7 +2,7 @@
 Yahoo finance API import. 
 @Author Sigurd Aleksander Sagstad
 """
-
+import norwegianStocks as nws
 import yahoo_fin.stock_info as si
 import pandas as pd
 #import yfinance as yf
@@ -10,8 +10,17 @@ import pandas as pd
 USD_TO_NOK = si.get_live_price("NOK=X") #Live price of USD in NOK
 
 def return_info(ticker, parameter):
-    quote = si.get_quote_table(ticker)
-    analysts_data = si.get_analysts_info(ticker)
+    try:
+        quote = si.get_quote_table(ticker)
+    except:
+        print("Quote not found. Exit.")
+        return None
+    try:
+        analysts_data = si.get_analysts_info(ticker)
+    except:
+        print("Analyst data not found. Exit.")
+        return None
+    
     switcher = {
         "liveprice": si.get_live_price(ticker),
         "pe": quote["PE Ratio (TTM)"],
@@ -37,13 +46,25 @@ def return_info(ticker, parameter):
     # print(analysts_data)
     return func
 
+def check_valid_return(ticker):
+    if return_info(ticker, "liveprice") == None:
+        return False
+    if return_info(ticker, "pe") == None:
+        return False
+    if return_info(ticker, "eps") == None:
+        return False
+    return True
+
 def return_est_val(ticker):
+    if check_valid_return(ticker) == False:
+        print("Not valid return. Exit.")
+        return
     live_val = return_info(ticker, "liveprice")
     est_val = return_info(ticker, "pe") * return_info(ticker, "eps")
     print("Live value: {0} \nEstimated value: {1}".format(live_val,est_val))
 
 def test_stocks():
-    stock_tickers = ["TEL.OL", "ORK.OL"]
+    stock_tickers = nws.get_tickers()
 
     for ticker in stock_tickers:
         print("\n")
@@ -52,3 +73,6 @@ def test_stocks():
 
 def all_info(ticker):
     print(si.get_quote_table(ticker))
+    
+
+#print(nws.get_tickers())

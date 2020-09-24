@@ -14,7 +14,9 @@ data_combined = data[1].iloc[:, :-2].copy()
 tickers_data = data[1].iloc[:, 1].copy().values.flatten()
 tickers = []
 for ticker in tickers_data:
-    tickers.append(ticker.replace("OSE: ", "")) 
+    tickers.append(ticker.replace("OSE: ", "") + ".OL") 
     
 #print(tickers)
 
+def get_tickers():
+    return tickers
