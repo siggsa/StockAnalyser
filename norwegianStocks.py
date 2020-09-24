@@ -1,23 +1,20 @@
-#All companies listed at Norwegian stock market.
+#All companies listed at Norwegian stock market, data from wikipedia.
 
 import requests as r
 from lxml import html
 import pandas as pd
-print("Something")
-page = r.get("https://en.wikipedia.org/wiki/Banana")
-#page = r.get("http://www.nasdaqomxnordic.com/shares/listed-companies/norwegian-listed-shares")
-#tree = html.fromstring(page.content)
-page.close
-if page.status_code == 200:
-    rest = page.text
-    stripped = r.sub('>[^<+?{}', ''
-#print()
-"""
-data = pd.DataFrame(
-    [[j.text_context() for j in i.getchildren() [:-1]] for i in trs],
-    columns = ["name", "symbol", "currency", "isin", "sector", "icb"]
-    )
 
-data["tickers"] = ["-".join(i.split(" "))+".OL" for i in data["symbol"].values]
+url = "https://en.wikipedia.org/wiki/List_of_companies_listed_on_the_Oslo_Stock_Exchange"
+page = r.get(url)
+page.close()
 
-"""
+data = pd.read_html(page.text)
+data_combined = data[1].iloc[:, :-2].copy()
+
+tickers_data = data[1].iloc[:, 1].copy().values.flatten()
+tickers = []
+for ticker in tickers_data:
+    tickers.append(ticker.replace("OSE: ", "")) 
+    
+#print(tickers)
+
