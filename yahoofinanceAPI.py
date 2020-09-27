@@ -63,16 +63,15 @@ def return_est_val(ticker):
     est_val = return_info(ticker, "pe") * return_info(ticker, "eps")
     print("Live value: {0} \nEstimated value: {1}".format(live_val,est_val))
 
-def test_stocks():
-    stock_tickers = nws.get_tickers()
-
-    for ticker in stock_tickers:
-        print("\n")
-        print("{0}".format(ticker))
-        return_est_val(ticker)
-
 def all_info(ticker):
     print(si.get_quote_table(ticker))
-    
 
-#print(nws.get_tickers())
+def check_future_estval(ticker):
+    if check_valid_return(ticker) == False:
+        print("Not valid return. Exit.")
+        return
+    live_val = return_info(ticker, "liveprice")
+    future_val = return_info(ticker, "1yest")
+    print("Live value: {0} \n1 year future estimated value: {1}".format(live_val,future_val))
+    
+    
