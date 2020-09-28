@@ -37,7 +37,7 @@ def return_info(ticker, parameter):
         "beta": quote["Beta (5Y Monthly)"],
         "earningsdate": quote["Earnings Date"],
         "exday": quote["Ex-Dividend Date"],
-        "fwddiv": quote["Forward Dividend & Yield"],
+        "fwddiv": quote["Forward Dividend & Yield"],            
         "growthrate": analysts_data["Growth Estimates"]
     }
     func = switcher.get(parameter, lambda: "Invalid parameter")
@@ -55,23 +55,32 @@ def check_valid_return(ticker):
         return False
     return True
 
-def return_est_val(ticker):
+def get_live_price(ticker):
     if check_valid_return(ticker) == False:
         print("Not valid return. Exit.")
         return
-    live_val = return_info(ticker, "liveprice")
+    live_price = return_info(ticker, "liveprice")
+    return live_price
+
+def get_est_val(ticker):
+    if check_valid_return(ticker) == False:
+        print("Not valid return. Exit.")
+        return
+    #live_val = return_info(ticker, "liveprice")
     est_val = return_info(ticker, "pe") * return_info(ticker, "eps")
-    print("Live value: {0} \nEstimated value: {1}".format(live_val,est_val))
+    #print("Live value: {0} \nEstimated value: {1}".format(live_val,est_val))
+    return est_val
 
 def all_info(ticker):
     print(si.get_quote_table(ticker))
 
-def check_future_estval(ticker):
+def get_future_estval(ticker):
     if check_valid_return(ticker) == False:
         print("Not valid return. Exit.")
         return
-    live_val = return_info(ticker, "liveprice")
+    #live_val = return_info(ticker, "liveprice")
     future_val = return_info(ticker, "1yest")
-    print("Live value: {0} \n1 year future estimated value: {1}".format(live_val,future_val))
+    #print("Live value: {0} \n1 year future estimated value: {1}".format(live_val,future_val))
+    return future_val
     
     
